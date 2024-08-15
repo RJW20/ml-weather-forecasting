@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "weather-forecasting"
+version = "0.1.0"
+description = "An exploration of different supervised machine learning models for predicting future weather."
+authors = ["RJW20"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+tensorflow-intel = "^2.17.0"
+matplotlib = "^3.9.1"
+pyqt6 = "^6.7.1"
+ruff = "^0.5.5"
+
+[tool.ruff]
+line-length = 80
+
+[tool.ruff.lint]
+select = ["F", "E", "W", "I", "N"]
+ignore = [
+    "W293",     # White space on blank lines
+]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
