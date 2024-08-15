@@ -1,0 +1,52 @@
+import numpy as np
+import pandas as pd
+import tensorflow as tf
+
+from weather_forecasting.temperature.load_data import load_data
+
+
+def evaluate_baseline(
+    dataset: tf.data.Dataset, target_mean: float, target_std: float
+) -> float:
+    """Return the MAE achieved by using the baseline method on the given
+    dataset."""
+
+    total_abs_error = 0
+    samples_seen = 0
+    for samples, targets in dataset:
+        # Temperature is 2nd column
+        predictions = samples[:, -1, 1] * target_std + target_mean
+        total_abs_error += np.sum(np.abs(predictions - targets))
+        samples_seen += samples.shape[0]
+
+    return total_abs_error / samples_seen
+
+
+def baseline_predictor(data_location: str) -> None:
+    """Simple baseline for prediction that predicts that the temperature in 24
+    hours is the exact same as it is currently.
+
+    Prints the MAE on the validation and test datasets.
+    """
+
+    train_dataset, val_dataset, test_dataset = load_data(
+        data_location,
+        train_prop=0.6,
+        val_prop=0.2,
+        sampling_rate=6,
+        target_delay=24,
+    )
+
+    temperature = pd.read_csv(data_location)["T (degC)"].to_numpy(
+        dtype=np.float32
+    )
+    mean = temperature.mean()
+    temperature -= mean
+    std = temperature.std()
+
+    print(f"Validation MAE: {evaluate_baseline(val_dataset, mean, std):.8f}")
+    print(f"Test MAE: {evaluate_baseline(test_dataset, mean, std):.8f}")
+
+
+if __name__ == "__main__":
+    baseline_predictor("weather_data/2017_2023.csv")
