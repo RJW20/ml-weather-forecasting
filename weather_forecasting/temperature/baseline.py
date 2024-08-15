@@ -3,6 +3,7 @@ import pandas as pd
 import tensorflow as tf
 
 from weather_forecasting.temperature.load_data import load_data
+from weather_forecasting.temperature.settings import settings
 
 
 def evaluate_baseline(
@@ -31,10 +32,6 @@ def baseline_predictor(data_location: str) -> None:
 
     train_dataset, val_dataset, test_dataset = load_data(
         data_location,
-        train_prop=0.6,
-        val_prop=0.2,
-        sampling_rate=6,
-        target_delay=24,
     )
 
     temperature = pd.read_csv(data_location)["T (degC)"].to_numpy(
@@ -49,4 +46,4 @@ def baseline_predictor(data_location: str) -> None:
 
 
 if __name__ == "__main__":
-    baseline_predictor("weather_data/2017_2023.csv")
+    baseline_predictor(settings['data_location'])

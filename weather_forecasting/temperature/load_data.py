@@ -71,21 +71,21 @@ def ensure_shape(
 
 
 def load_data(
-    filename: str,
+    data_location: str,
     *,
     train_prop: float = 0.5,
     val_prop: float = 0.25,
     sampling_rate: int = 6,
     window_size: int = 10,
     batch_size: int = 64,
-    target_delay: int = 1,
+    target_delay: int = 24,
 ) -> tuple[tf.data.Dataset, tf.data.Dataset, tf.data.Dataset]:
-    """Load and prepare the weather data saved at the given filename.
+    """Load and prepare the weather data saved at the given data_location.
 
     Returns 3 tf.data.Datasets, each containing the training, validation and
     testing data respectively.
     Parameters:
-    - filename: the location (csv) for the saved weather data to open.
+    - data_location: the filename (csv) for the saved weather data to open.
     - train_prop: the proportion of the data to include in the training Dataset.
     - val_prop: the proportion of the data to include in the validation Dataset.
     - sampling_rate: the period between successive individual timesteps within
@@ -99,7 +99,7 @@ def load_data(
     Raises a FileNotFoundError if the file does not exist.
     """
 
-    raw_data = pd.read_csv(filename, index_col="Date Time").drop(
+    raw_data = pd.read_csv(data_location, index_col="Date Time").drop(
         columns=["rain (mm)"],
     )
     targets = raw_data['T (degC)'].to_numpy(dtype=np.float32)
