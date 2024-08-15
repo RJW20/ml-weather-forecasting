@@ -71,6 +71,13 @@ def download_weather_data(years=5) -> None:
     ]
     pd.concat(
         retrieve_weather_data_for(filename) for filename in filenames
+    ).drop(
+        columns=[
+            'SWDR (W/m**2)', 'SDUR (s)', 'TRAD (degC)', 'Rn (W/m**2)',
+            'ST002 (degC)', 'ST004 (degC)', 'ST008 (degC)', 'ST016 (degC)',
+            'ST032 (degC)', 'ST064 (degC)', 'ST128 (degC)', 'SM008 (%)',
+            'SM016 (%)', 'SM032 (%)', 'SM064 (%)', 'SM128 (%)'
+        ]
     ).to_csv(
         f"weather_data/{years_to_download[0]}_{years_to_download[-1]}.csv",
         mode="w",
