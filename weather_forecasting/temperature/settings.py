@@ -10,4 +10,5 @@ settings = {
     'batch_size': 256,
     'target_delay': 24,
 
+    'epochs': 10,
 }
