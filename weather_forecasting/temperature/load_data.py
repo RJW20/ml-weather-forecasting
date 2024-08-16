@@ -5,6 +5,15 @@ from numpy.typing import NDArray
 from tensorflow import keras
 
 
+def clean_data(data: pd.DataFrame, nan_value: float) -> pd.DataFrame:
+    """Return the cleaned given DataFrame.
+    
+    Linearly interpolates all data at points with the given nan_value.
+    """
+
+    return data.replace(-9999.0, np.nan).interpolate()
+
+
 def generate_datasets(
     data: NDArray[np.float32],
     targets: NDArray[np.float32],
@@ -102,6 +111,7 @@ def load_data(
     raw_data = pd.read_csv(data_location, index_col="Date Time").drop(
         columns=["rain (mm)"],
     )
+    raw_data = clean_data(raw_data, -9999.0)
     targets = raw_data['T (degC)'].to_numpy(dtype=np.float32)
 
     num_train_samples = int(train_prop * len(raw_data.index))
