@@ -36,7 +36,7 @@ def simple_recurrent() -> None:
     model.compile(optimizer="rmsprop", loss="mse", metrics=["mae"])
     history = model.fit(
         train_dataset,
-        epochs=settings['epochs'],
+        epochs=20,
         validation_data=val_dataset,
         callbacks=callbacks,
     )

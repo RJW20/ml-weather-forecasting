@@ -37,7 +37,7 @@ def simple_dense() -> None:
     model.compile(optimizer="rmsprop", loss="mse", metrics=["mae"])
     history = model.fit(
         train_dataset,
-        epochs=settings['epochs'],
+        epochs=10,
         validation_data=val_dataset,
         callbacks=callbacks,
     )
