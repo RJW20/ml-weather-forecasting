@@ -25,7 +25,7 @@ def evaluate_baseline(
     return total_abs_error / samples_seen
 
 
-def baseline_predictor(data_location: str) -> None:
+def baseline_predictor() -> None:
     """Simple baseline for prediction that predicts that the temperature in 24
     hours is the exact same as it is currently.
 
@@ -33,10 +33,10 @@ def baseline_predictor(data_location: str) -> None:
     """
 
     train_dataset, val_dataset, test_dataset = load_data(
-        data_location,
+        settings['data_location'],
     )
 
-    temperature = pd.read_csv(data_location)["T (degC)"]
+    temperature = pd.read_csv(settings['data_location'])["T (degC)"]
     mean = temperature.mean()
     temperature -= mean
     std = temperature.std()
@@ -46,4 +46,4 @@ def baseline_predictor(data_location: str) -> None:
 
 
 if __name__ == "__main__":
-    baseline_predictor(settings['data_location'])
+    baseline_predictor()
