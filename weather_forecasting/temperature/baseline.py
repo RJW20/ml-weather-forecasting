@@ -7,7 +7,9 @@ from weather_forecasting.temperature.settings import settings
 
 
 def evaluate_baseline(
-    dataset: tf.data.Dataset, target_mean: float, target_std: float
+    dataset: tf.data.Dataset,
+    target_mean: float,
+    target_std: float,
 ) -> float:
     """Return the MAE achieved by using the baseline method on the given
     dataset."""
@@ -34,9 +36,7 @@ def baseline_predictor(data_location: str) -> None:
         data_location,
     )
 
-    temperature = pd.read_csv(data_location)["T (degC)"].to_numpy(
-        dtype=np.float32
-    )
+    temperature = pd.read_csv(data_location)["T (degC)"]
     mean = temperature.mean()
     temperature -= mean
     std = temperature.std()
