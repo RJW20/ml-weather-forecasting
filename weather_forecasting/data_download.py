@@ -31,7 +31,7 @@ def check_valid_years(years) -> range:
 
 def retrieve_weather_data_for(filename: str) -> pd.DataFrame:
     """Return a pd.DataFrame containing the weather data for the given filename
-    found at 'https://www.bgc-jena.mpg.de/wetter/weather_data.html'.
+    found at https://www.bgc-jena.mpg.de/wetter/weather_data.html.
     
     Raises a FileNotFoundError if the requested filename cannot be found, or if
     the csv file cannot be found within the zip file.
@@ -57,7 +57,7 @@ def retrieve_weather_data_for(filename: str) -> pd.DataFrame:
 def download_weather_data(years=5) -> None:
     """Download the weather data for the number of given years (ending at the
     end of the previous year) for the data measured at WS Saaleaue available at
-    'https://www.bgc-jena.mpg.de/wetter/weather_data.html'.
+    https://www.bgc-jena.mpg.de/wetter/weather_data.html.
     
     Raises a ValueError if the given years isn't strictly positive or is too
     large (data is only available back to the start of 2003).
