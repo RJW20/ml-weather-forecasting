@@ -105,7 +105,7 @@ def load_data(
     the 3 Datasets.
     - target_delay: sampling_rate * target_delay is the number of timesteps into
     the future the target is from the data used to predict it.
-    Raises a FileNotFoundError if the file does not exist.
+    Raises a FileNotFoundError if no file is found at the given data_location.
     """
 
     raw_data = pd.read_csv(data_location, index_col="Date Time").drop(

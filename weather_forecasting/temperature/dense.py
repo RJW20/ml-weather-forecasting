@@ -55,5 +55,5 @@ def simple_dense() -> None:
     plt.show()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     simple_dense()
