@@ -4,6 +4,8 @@ import tensorflow as tf
 from numpy.typing import NDArray
 from tensorflow import keras
 
+from matplotlib import pyplot as plt
+
 
 def clean_data(data: pd.DataFrame, nan_value: float) -> pd.DataFrame:
     """Return the cleaned given DataFrame.
@@ -11,7 +13,31 @@ def clean_data(data: pd.DataFrame, nan_value: float) -> pd.DataFrame:
     Linearly interpolates all data at points with the given nan_value.
     """
 
-    return data.replace(-9999.0, np.nan).interpolate()
+    return data.replace(nan_value, np.nan).interpolate()
+
+
+def feature_engineer(data: pd.DataFrame) -> None:
+    """Carry out feature engineering on the given DataFrame.
+    
+    Turns the wind velocity and wind direction columns into wind x and y speeds.
+    Adds daily and yearly sine and cosine time-signal columns.
+    """
+
+    wv = data.pop('wv (m/s)')
+    wd_rad = data.pop('wd (deg)')*np.pi / 180
+    data['wx (m/s)'] = wv*np.cos(wd_rad)
+    data['wy (m/s)'] = wv*np.sin(wd_rad)
+
+    timestamp_seconds = pd.to_datetime(
+        data.index,
+        format='%d.%m.%Y %H:%M:%S',
+    ).map(pd.Timestamp.timestamp)
+    day = 24 * 60 * 60
+    year = 365.2425 * day
+    data['day sin'] = np.sin(timestamp_seconds * (2 * np.pi / day))
+    data['day cos'] = np.cos(timestamp_seconds * (2 * np.pi / day))
+    data['year sin'] = np.sin(timestamp_seconds * (2 * np.pi / year))
+    data['year cos'] = np.cos(timestamp_seconds * (2 * np.pi / year))
 
 
 def generate_datasets(
@@ -112,6 +138,7 @@ def load_data(
         columns=["rain (mm)"],
     )
     raw_data = clean_data(raw_data, -9999.0)
+    feature_engineer(raw_data)
     targets = raw_data['T (degC)'].to_numpy(dtype=np.float32)
 
     num_train_samples = int(train_prop * len(raw_data.index))
