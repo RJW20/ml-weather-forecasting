@@ -4,8 +4,6 @@ import tensorflow as tf
 from numpy.typing import NDArray
 from tensorflow import keras
 
-from matplotlib import pyplot as plt
-
 
 def clean_data(data: pd.DataFrame, nan_value: float) -> pd.DataFrame:
     """Return the cleaned given DataFrame.
