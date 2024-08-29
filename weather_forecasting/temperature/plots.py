@@ -5,31 +5,18 @@ from matplotlib import pyplot as plt
 from weather_forecasting.temperature.load_data import clean_data
 
 
-def temperature() -> None:
+def subplots() -> None:
 
     raw_data = pd.read_csv("weather_data/2017_2023.csv", index_col="Date Time")
     raw_data = clean_data(raw_data, -9999.0)
-    temperature = raw_data["T (degC)"]
-    #plt.plot(range(len(temperature)), temperature)
-    plt.plot(range(1440), temperature[:1440])
-    plt.show()
-
-
-def pressure() -> None:
-
-    raw_data = pd.read_csv("weather_data/2017_2023.csv", index_col="Date Time")
-    raw_data = clean_data(raw_data, -9999.0)
-    pressure = raw_data["p (mbar)"]
-    plt.plot(range(len(pressure)), pressure)
-    plt.show()
-
-
-def rain() -> None:
-
-    raw_data = pd.read_csv("weather_data/2017_2023.csv", index_col="Date Time")
-    raw_data = clean_data(raw_data, -9999.0)
-    rain = raw_data["rain (mm)"]
-    plt.plot(range(len(rain)), rain)
+    raw_data = raw_data[5::6]
+    plot_cols = ['T (degC)', 'p (mbar)', 'rho (g/m**3)', 'rain (mm)']
+    plot_features = raw_data[plot_cols]
+    plot_features.index = pd.to_datetime(
+        raw_data.index,
+        format='%d.%m.%Y %H:%M:%S',
+    )
+    _ = plot_features.plot(subplots=True)
     plt.show()
 
 
@@ -56,5 +43,5 @@ def violin() -> None:
 
 
 if __name__ == "__main__":
-    
-    rain()
+    subplots()
+    #violin()
