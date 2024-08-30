@@ -37,7 +37,6 @@ def baseline_predictor() -> None:
     )
 
     temperature = pd.read_csv(settings['data_location'])["T (degC)"]
-
     num_train_samples = int(settings['train_prop'] * len(temperature))
     mean = temperature[:num_train_samples].mean()
     std = temperature[:num_train_samples].std()
