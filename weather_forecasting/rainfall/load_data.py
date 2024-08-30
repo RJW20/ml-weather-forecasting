@@ -54,7 +54,10 @@ def load_data(
     raw_data = pd.read_csv(data_location, index_col="Date Time")
     raw_data = clean_data(raw_data, -9999.0)
     feature_engineer(raw_data)
-    targets = create_targets(raw_data['ran (mm)'], sampling_rate * target_delay)
+    targets = create_targets(
+        raw_data['rain (mm)'],
+        sampling_rate * target_delay,
+    )
 
     num_train_samples = int(train_prop * len(raw_data.index))
     num_val_samples = int(val_prop * len(raw_data.index))
