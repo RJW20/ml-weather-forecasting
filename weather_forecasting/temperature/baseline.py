@@ -33,7 +33,7 @@ def baseline_predictor() -> None:
     """
 
     train_dataset, val_dataset, test_dataset = load_data(
-        settings['data_location'],
+        **settings,
     )
 
     temperature = pd.read_csv(settings['data_location'])["T (degC)"]

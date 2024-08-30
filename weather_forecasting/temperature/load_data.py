@@ -106,17 +106,19 @@ def ensure_shape(
 def load_data(
     data_location: str,
     *,
-    train_prop: float = 0.5,
-    val_prop: float = 0.25,
-    sampling_rate: int = 6,
-    window_size: int = 10,
-    batch_size: int = 64,
-    target_delay: int = 24,
+    train_prop: float,
+    val_prop: float,
+    sampling_rate: int,
+    window_size: int,
+    batch_size: int,
+    target_delay: int,
 ) -> tuple[tf.data.Dataset, tf.data.Dataset, tf.data.Dataset]:
     """Load and prepare the weather data saved at the given data_location.
 
     Returns 3 tf.data.Datasets, each containing the training, validation and
-    testing data respectively.
+    testing data respectively. The targets within each Dataset are the
+    temperature values at the (indirectly) specified number of timesteps into
+    the future.
     Parameters:
     - data_location: the filename (csv) for the saved weather data to open.
     - train_prop: the proportion of the data to include in the training Dataset.
@@ -132,9 +134,7 @@ def load_data(
     Raises a FileNotFoundError if no file is found at the given data_location.
     """
 
-    raw_data = pd.read_csv(data_location, index_col="Date Time").drop(
-        columns=["rain (mm)"],
-    )
+    raw_data = pd.read_csv(data_location, index_col="Date Time")
     raw_data = clean_data(raw_data, -9999.0)
     feature_engineer(raw_data)
     targets = raw_data['T (degC)'].to_numpy(dtype=np.float32)

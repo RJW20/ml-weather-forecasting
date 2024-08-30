@@ -15,9 +15,7 @@ def stacked_recurrent() -> None:
     """
 
     train_dataset, val_dataset, test_dataset = load_data(
-        settings['data_location'],
-        window_size=settings['window_size'],
-        batch_size=settings['batch_size']
+        **settings,
     )
 
     num_features = train_dataset.element_spec[0].shape[2]
