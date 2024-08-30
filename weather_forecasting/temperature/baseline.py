@@ -37,9 +37,10 @@ def baseline_predictor() -> None:
     )
 
     temperature = pd.read_csv(settings['data_location'])["T (degC)"]
-    mean = temperature.mean()
-    temperature -= mean
-    std = temperature.std()
+
+    num_train_samples = int(settings['train_prop'] * len(temperature))
+    mean = temperature[:num_train_samples].mean()
+    std = temperature[:num_train_samples].std()
 
     print(f"Validation MAE: {evaluate_baseline(val_dataset, mean, std):.8f}")
     print(f"Test MAE: {evaluate_baseline(test_dataset, mean, std):.8f}")
