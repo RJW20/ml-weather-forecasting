@@ -9,7 +9,7 @@ from weather_forecasting.temperature.settings import settings
 def simple_recurrent() -> None:
     """Implements a simple recurrent neural network for temperature prediction.
     
-    Saves the final model to models/recurrent.keras
+    Saves the final model to models/temperature/recurrent.keras
     Prints the MAE on the validation datasets.
     Displays the loss curves for validation and training.
     """
@@ -27,7 +27,7 @@ def simple_recurrent() -> None:
 
     callbacks = [
         keras.callbacks.ModelCheckpoint(
-            "models/recurrent.keras",
+            "models/temperature/recurrent.keras",
             save_best_only=True,
         )
     ]
@@ -39,7 +39,7 @@ def simple_recurrent() -> None:
         callbacks=callbacks,
     )
 
-    model = keras.models.load_model("models/recurrent.keras")
+    model = keras.models.load_model("models/temperature/recurrent.keras")
     print(f"Test MAE: {model.evaluate(test_dataset, verbose=0)[1]:.8f}")
 
     mae = history.history["mae"]

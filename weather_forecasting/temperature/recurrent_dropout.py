@@ -10,7 +10,7 @@ def recurrent_dropout() -> None:
     """Implements a recurrent neural network with dropout for temperature
     prediction.
     
-    Saves the final model to models/recurrent_dropout.keras
+    Saves the final model to models/temperature/recurrent_dropout.keras
     Prints the MAE on the validation datasets.
     Displays the loss curves for validation and training.
     """
@@ -29,7 +29,7 @@ def recurrent_dropout() -> None:
 
     callbacks = [
         keras.callbacks.ModelCheckpoint(
-            "models/recurrent_dropout.keras",
+            "models/temperature/recurrent_dropout.keras",
             save_best_only=True,
         )
     ]
@@ -41,7 +41,7 @@ def recurrent_dropout() -> None:
         callbacks=callbacks,
     )
 
-    model = keras.models.load_model("models/recurrent_dropout.keras")
+    model = keras.models.load_model("models/temperature/recurrent_dropout.keras")
     print(f"Test MAE: {model.evaluate(test_dataset, verbose=0)[1]:.8f}")
 
     mae = history.history["mae"]

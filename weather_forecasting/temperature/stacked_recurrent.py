@@ -9,7 +9,7 @@ from weather_forecasting.temperature.settings import settings
 def stacked_recurrent() -> None:
     """Implements a stacked recurrent neural network for temperature prediction.
     
-    Saves the final model to models/stacked_recurrent.keras
+    Saves the final model to models/temperature/stacked_recurrent.keras
     Prints the MAE on the validation datasets.
     Displays the loss curves for validation and training.
     """
@@ -29,7 +29,7 @@ def stacked_recurrent() -> None:
 
     callbacks = [
         keras.callbacks.ModelCheckpoint(
-            "models/stacked_recurrent.keras",
+            "models/temperature/stacked_recurrent.keras",
             save_best_only=True,
         )
     ]
@@ -41,7 +41,7 @@ def stacked_recurrent() -> None:
         callbacks=callbacks,
     )
 
-    model = keras.models.load_model("models/stacked_recurrent.keras")
+    model = keras.models.load_model("models/temperature/stacked_recurrent.keras")
     print(f"Test MAE: {model.evaluate(test_dataset, verbose=0)[1]:.8f}")
 
     mae = history.history["mae"]

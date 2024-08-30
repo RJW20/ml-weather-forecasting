@@ -9,7 +9,7 @@ from weather_forecasting.temperature.settings import settings
 def simple_dense() -> None:
     """Implements a simple dense neural network for temperature prediction.
     
-    Saves the final model to models/dense.keras
+    Saves the final model to models/temperature/dense.keras
     Prints the MAE on the test dataset.
     Displays the loss curves for validation and training MAE.
     """
@@ -28,7 +28,7 @@ def simple_dense() -> None:
 
     callbacks = [
         keras.callbacks.ModelCheckpoint(
-            "models/dense.keras",
+            "models/temperature/dense.keras",
             save_best_only=True,
         )
     ]
@@ -40,7 +40,7 @@ def simple_dense() -> None:
         callbacks=callbacks,
     )
 
-    model = keras.models.load_model("models/dense.keras")
+    model = keras.models.load_model("models/temperature/dense.keras")
     print(f"Test MAE: {model.evaluate(test_dataset, verbose=0)[1]:.8f}")
 
     mae = history.history["mae"]
