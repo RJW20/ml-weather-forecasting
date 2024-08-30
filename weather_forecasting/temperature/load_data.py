@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-from numpy.typing import NDArray
 
 from weather_forecasting.data_preprocessing import (
     clean_data,
