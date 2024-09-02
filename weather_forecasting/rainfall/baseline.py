@@ -8,6 +8,7 @@ from weather_forecasting.rainfall.settings import settings
 
 def evaluate_baseline(
     dataset: tf.data.Dataset,
+    target_delay: int,
     target_mean: float,
     target_std: float,
 ) -> float:
@@ -19,7 +20,8 @@ def evaluate_baseline(
     for samples, targets in dataset:
         # Rain is 14th column
         predictions = sum(
-            samples[:, i, 13] * target_std + target_mean for i in range(-6,0)
+            samples[:, i, 13] * target_std + target_mean
+            for i in range(-target_delay,0)
         )
         total_abs_error += np.sum(np.abs(predictions - targets))
         samples_seen += samples.shape[0]
@@ -29,7 +31,7 @@ def evaluate_baseline(
 
 def baseline_predictor() -> None:
     """Simple baseline for prediction that predicts that the rainfall in the
-    next hour is the exact same as in the previous hour.
+    next timeframe is the exact same as in the previous timeframe.
 
     Prints the MAE on the validation and test datasets.
     """
@@ -43,8 +45,15 @@ def baseline_predictor() -> None:
     mean = rainfall[:num_train_samples].mean()
     std = rainfall[:num_train_samples].std()
 
-    print(f"Validation MAE: {evaluate_baseline(val_dataset, mean, std):.8f}")
-    print(f"Test MAE: {evaluate_baseline(test_dataset, mean, std):.8f}")
+    target_delay = settings['target_delay']
+    print(
+        "Validation MAE: "
+        f"{evaluate_baseline(val_dataset, target_delay, mean, std):.8f}"
+    )
+    print(
+        "Test MAE: "
+        f"{evaluate_baseline(test_dataset, target_delay, mean, std):.8f}"
+    )
 
 
 if __name__ == "__main__":
