@@ -1,9 +1,10 @@
-import matplotlib.pyplot as plt
 from tensorflow import keras
 from tensorflow.keras import layers
 
+from weather_forecasting.evaluate_model import evaluate_model
 from weather_forecasting.temperature.load_data import load_data
 from weather_forecasting.temperature.settings import settings
+from weather_forecasting.train_model import train_model
 
 
 def simple_recurrent() -> None:
@@ -25,31 +26,10 @@ def simple_recurrent() -> None:
     outputs = layers.Dense(1)(x)
     model = keras.Model(inputs, outputs)
 
-    callbacks = [
-        keras.callbacks.ModelCheckpoint(
-            "models/temperature/recurrent.keras",
-            save_best_only=True,
-        )
-    ]
-    model.compile(optimizer="rmsprop", loss="mse", metrics=["mae"])
-    history = model.fit(
-        train_dataset,
-        epochs=20,
-        validation_data=val_dataset,
-        callbacks=callbacks,
-    )
-
-    model = keras.models.load_model("models/temperature/recurrent.keras")
-    print(f"Test MAE: {model.evaluate(test_dataset, verbose=0)[1]:.8f}")
-
-    mae = history.history["mae"]
-    val_mae = history.history["val_mae"]
-    epochs = range(1, len(mae) + 1)
-    plt.figure()
-    plt.plot(epochs, mae, "bo", label="Training MAE")
-    plt.plot(epochs, val_mae, "b", label="Validation MAE")
-    plt.legend()
-    plt.show()
+    save_location = "models/temperature/recurrent.keras"
+    train_model(model, train_dataset, val_dataset, save_location)
+    model = keras.models.load_model(save_location)
+    evaluate_model(model, test_dataset, "T (degC)")
 
 
 if __name__ == "__main__":
