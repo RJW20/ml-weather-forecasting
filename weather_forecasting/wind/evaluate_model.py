@@ -12,7 +12,12 @@ def test_predictions(model: keras.Model, test_dataset: tf.data.Dataset) -> None:
     targets_speed = np.linalg.norm(targets, axis=1, ord=2, keepdims=True)
     targets_directions = targets / targets_speed
     predictions = model.predict(test_dataset, verbose=0)
-    predictions_speed = np.linalg.norm(predictions, axis=1, ord=2, keepdims=True)
+    predictions_speed = np.linalg.norm(
+        predictions,
+        axis=1,
+        ord=2,
+        keepdims=True,
+    )
     predictions_directions = predictions / predictions_speed
 
     plt.figure(figsize=(18, 9))
@@ -53,12 +58,17 @@ def test_predictions(model: keras.Model, test_dataset: tf.data.Dataset) -> None:
     plt.xticks([])
     plt.yticks([])
     plt.ylabel("wind direction")
+    plt.legend()
 
     plt.subplot(2, 1, 2)
     plt.plot(range(25), targets_speed[-25:], marker="o", label="Targets")
-    plt.plot(range(25), predictions_speed[-25:], marker="x", label="Predictions")
-    plt.ylabel("wind speed")
-
+    plt.plot(
+        range(25),
+        predictions_speed[-25:],
+        marker="x",
+        label="Predictions",
+    )
+    plt.ylabel("wind speed (m/s)")
     plt.legend()
 
 
