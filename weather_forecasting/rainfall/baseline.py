@@ -18,11 +18,12 @@ def evaluate_baseline(
     total_abs_error = 0
     samples_seen = 0
     for samples, targets in dataset:
-        # Rain is 14th column
+        # Rain is 11th column
         predictions = sum(
-            samples[:, i, 13] * target_std + target_mean
+            samples[:, i, 10] * target_std + target_mean
             for i in range(-target_delay,0)
         )
+        #predictions = np.zeros(shape=targets.shape)
         total_abs_error += np.sum(np.abs(predictions - targets))
         samples_seen += samples.shape[0]
 
