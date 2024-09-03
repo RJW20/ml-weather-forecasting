@@ -72,7 +72,6 @@ def test_predictions(model: keras.Model, test_dataset: tf.data.Dataset) -> None:
     plt.legend()
 
 
-
 def evaluate_model(model: keras.Model, test_dataset: tf.data.Dataset) -> None:
     """Evaluate the given model on the given testing dataset.
     
