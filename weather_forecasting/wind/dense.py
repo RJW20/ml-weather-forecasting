@@ -28,7 +28,7 @@ def simple_dense() -> None:
     model = keras.Model(inputs, outputs)
 
     save_location = "models/wind/dense.keras"
-    #train_model(model, train_dataset, val_dataset, save_location)
+    train_model(model, train_dataset, val_dataset, save_location)
     model = keras.models.load_model(save_location)
     evaluate_model(model, test_dataset)
 
