@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 from tensorflow import keras
 from tensorflow.keras import layers
 
@@ -12,8 +13,12 @@ def recurrent_dropout() -> None:
     prediction.
     
     Saves the final model to models/temperature/recurrent_dropout.keras
-    Prints the MAE on the validation datasets.
-    Displays the loss curves for validation and training.
+    Displays the loss curves for validation and training MAE, and saves
+    the plot to figures/temperature/recurrent_dropout_training.png.
+    Displays a sample of the predictions against their targets for the test
+    dataset, and saves the plot to
+    figures/temperature/recurrent_dropout_evaluation.png.
+    Prints the MAE on the test dataset.
     """
 
     train_dataset, val_dataset, test_dataset = load_data(
@@ -30,8 +35,17 @@ def recurrent_dropout() -> None:
 
     save_location = "models/temperature/recurrent_dropout.keras"
     train_model(model, train_dataset, val_dataset, save_location)
+    plt.savefig(
+        "figures/temperature/recurrent_dropout_training.png",
+        bbox_inches="tight",
+    )
     model = keras.models.load_model(save_location)
     evaluate_model(model, test_dataset, "T (degC)")
+    plt.savefig(
+        "figures/temperature/recurrent_dropout_evaluation.png",
+        bbox_inches="tight",
+    )
+    plt.show()
 
 
 if __name__ == "__main__":
