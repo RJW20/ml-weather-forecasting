@@ -1,3 +1,5 @@
+import random
+
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
@@ -10,13 +12,25 @@ def test_predictions(
     target_label: str,
 ) -> None:
     """Compute predictions for the test dataset and generate a plt.figure
-    displaying the last 25 predicted values and their targets."""
+    displaying a sample of 25 (consecutive) hours of predicted values and their
+    targets."""
 
-    targets = np.concatenate(list(targets for samples, targets in test_dataset))
+    targets = np.concatenate([targets for samples, targets in test_dataset])
     predictions = model.predict(test_dataset, verbose=0)
+    start = random.randrange(0, len(targets) - 150)
     plt.figure(figsize=(15, 4.8))
-    plt.plot(range(25), targets[-25:], marker="o", label="Targets")
-    plt.plot(range(25), predictions[-25:], marker="x", label="Predictions")
+    plt.plot(
+        range(25),
+        targets[start:start + 150:6],
+        marker="o",
+        label="Targets",
+    )
+    plt.plot(
+        range(25),
+        predictions[start:start + 150:6],
+        marker="x",
+        label="Predictions",
+    )
     plt.legend()
     plt.ylabel(target_label)
 

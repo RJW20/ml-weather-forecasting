@@ -1,3 +1,5 @@
+import random
+
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
@@ -6,7 +8,8 @@ from tensorflow import keras
 
 def test_predictions(model: keras.Model, test_dataset: tf.data.Dataset) -> None:
     """Compute predictions for the test dataset and generate a plt.figure
-    displaying the last 25 predicted vectors and their targets."""
+    displaying a sample of 25 (consecutive) hours of predicted values and their
+    targets."""
 
     targets = np.concatenate(list(targets for samples, targets in test_dataset))
     targets_speed = np.linalg.norm(targets, axis=1, ord=2, keepdims=True)
@@ -19,14 +22,15 @@ def test_predictions(model: keras.Model, test_dataset: tf.data.Dataset) -> None:
         keepdims=True,
     )
     predictions_directions = predictions / predictions_speed
+    start = random.randrange(0, len(targets) - 150)
 
     plt.figure(figsize=(18, 9))
     plt.subplot(2, 1, 1)
     plt.quiver(
         [_ for _ in range(25)],
         [2] * 25,
-        targets_directions[-25:, 0],
-        targets_directions[-25:,1],
+        targets_directions[start:start + 150:6, 0],
+        targets_directions[start:start + 150:6,1],
         pivot="mid",
         label="Targets",
         color='C0',
@@ -41,8 +45,8 @@ def test_predictions(model: keras.Model, test_dataset: tf.data.Dataset) -> None:
     plt.quiver(
         [_ for _ in range(25)],
         [1] * 25,
-        predictions_directions[-25:, 0],
-        predictions_directions[-25:,1],
+        predictions_directions[start:start + 150:6, 0],
+        predictions_directions[start:start + 150:6,1],
         pivot="mid",
         label="Predictions",
         color='C1',
@@ -61,10 +65,15 @@ def test_predictions(model: keras.Model, test_dataset: tf.data.Dataset) -> None:
     plt.legend()
 
     plt.subplot(2, 1, 2)
-    plt.plot(range(25), targets_speed[-25:], marker="o", label="Targets")
     plt.plot(
         range(25),
-        predictions_speed[-25:],
+        targets_speed[start:start + 150:6],
+        marker="o",
+        label="Targets",
+    )
+    plt.plot(
+        range(25),
+        predictions_speed[start:start + 150:6],
         marker="x",
         label="Predictions",
     )

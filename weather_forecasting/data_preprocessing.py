@@ -102,7 +102,7 @@ def generate_datasets(
         sampling_rate=sampling_rate,
         sequence_length=window_size,
         batch_size=batch_size,
-        shuffle=True,
+        shuffle=False,
         start_index=num_train_samples+num_val_samples,
     )
 
