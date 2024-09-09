@@ -32,6 +32,7 @@ def test_predictions(
         label="Predictions",
     )
     plt.legend()
+    plt.xlabel("Hours")
     plt.ylabel(target_label)
 
 
@@ -43,8 +44,8 @@ def evaluate_model(
     """Evaluate the given model on the given testing dataset.
     
     Prints the MAE on the test dataset.
-    Displays a sample of the predictions against their targets for the test
-    dataset.
+    Generates a plt.figure for a sample of the predictions against their targets
+    for the test dataset.
     """
 
     print(
@@ -56,4 +57,3 @@ def evaluate_model(
         )['mae']:.8f}"
     )
     test_predictions(model, test_dataset, target_label)
-    plt.show()

@@ -16,6 +16,8 @@ def loss_curves(history: keras.callbacks.History) -> None:
     plt.figure()
     plt.plot(epochs, mae, "bo", label="Training MAE")
     plt.plot(epochs, val_mae, "b", label="Validation MAE")
+    plt.xlabel("Epochs")
+    plt.ylabel("MAE")
     plt.legend()
 
 
@@ -29,7 +31,7 @@ def train_model(
     
     Saves the best version of the model to the given save location (should end
     in .keras).
-    Displays the loss curves for validation and training MAE.
+    Generates a plt.figure of the loss curves for validation and training MAE.
     """
 
     callbacks = [
