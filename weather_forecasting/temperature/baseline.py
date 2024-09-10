@@ -38,7 +38,7 @@ class Baseline:
         samples_seen = 0
         for samples, targets in dataset:
             # Temperature is 2nd column
-            predictions = samples[:, -1, 1] * self.target_std + self.target_mean
+            predictions = samples[:,-1,1] * self.target_std + self.target_mean
             total_abs_error += np.sum(np.abs(predictions - targets))
             samples_seen += samples.shape[0]
 
