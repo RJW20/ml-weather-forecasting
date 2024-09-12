@@ -26,7 +26,7 @@ def simple_recurrent() -> None:
     num_features = train_dataset.element_spec[0].shape[2]
 
     inputs = keras.Input(shape=(settings['window_size'], num_features))
-    x = layers.LSTM(16)(inputs)
+    x = layers.LSTM(32)(inputs)
     outputs = layers.Dense(1)(x)
     model = keras.Model(inputs, outputs)
 
