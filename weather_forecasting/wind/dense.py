@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 from tensorflow import keras
 from tensorflow.keras import layers
 
@@ -11,8 +12,11 @@ def simple_dense() -> None:
     """Implements a simple dense neural network for wind prediction.
     
     Saves the final model to models/wind/dense.keras
+    Displays the loss curves for validation and training MAE, and saves
+    the plot to figures/wind/dense_training.png.
+    Displays a sample of the predictions against their targets for the test
+    dataset, and saves the plot to figures/wind/dense_evaluation.png.
     Prints the MAE on the test dataset.
-    Displays the loss curves for validation and training MAE.
     """
 
     train_dataset, val_dataset, test_dataset = load_data(
@@ -29,8 +33,11 @@ def simple_dense() -> None:
 
     save_location = "models/wind/dense.keras"
     train_model(model, train_dataset, val_dataset, save_location)
+    plt.savefig("figures/wind/dense_training.png", bbox_inches="tight")
     model = keras.models.load_model(save_location)
     evaluate_model(model, test_dataset)
+    plt.savefig("figures/wind/dense_evaluation.png", bbox_inches="tight")
+    plt.show()
 
 
 if __name__ == "__main__":
