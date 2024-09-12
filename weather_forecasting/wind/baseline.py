@@ -72,7 +72,7 @@ def baseline_predictor() -> None:
     print(f"Validation MAE: {model.evaluate(val_dataset)['mae']:.8f}")
 
     evaluate_model(model, test_dataset)
-    plt.savefig("figures/wind/dense_evaluation.png", bbox_inches="tight")
+    plt.savefig("figures/wind/baseline_evaluation.png", bbox_inches="tight")
     plt.show()
 
 

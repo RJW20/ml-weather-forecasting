@@ -67,7 +67,10 @@ def baseline_predictor() -> None:
     print(f"Validation MAE: {model.evaluate(val_dataset)['mae']:.8f}")
 
     evaluate_model(model, test_dataset, "T (degC)")
-    plt.savefig("figures/temperature/dense_evaluation.png", bbox_inches="tight")
+    plt.savefig(
+        "figures/temperature/baseline_evaluation.png",
+        bbox_inches="tight",
+    )
     plt.show()
 
 
