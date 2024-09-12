@@ -67,18 +67,18 @@ The simplest model that takes advantage of the fact that our data is a timeserie
 
 ```
 inputs = keras.Input(shape=(settings['window_size'], num_features))
-x = layers.LSTM(16)(inputs)
+x = layers.LSTM(32)(inputs)
 outputs = layers.Dense(1)(x)
 model = keras.Model(inputs, outputs)
 ```
 
 #### Training
-The best validation MAE of 2.76 degrees Celsius occurs in the 6th epoch:
+The best validation MAE of 2.70 degrees Celsius occurs in the 1st epoch:
 
 ![Recurrent network loss curves](/figures/temperature/recurrent_training.png)
 
 #### Evaluation
-The best version of the model achieves a test MAE of 2.51 degrees Celsius, and the following (sample of) predictions vs targets:
+The best version of the model achieves a test MAE of 2.53 degrees Celsius, and the following (sample of) predictions vs targets:
 
 ![Recurrent network predictions](/figures/temperature/recurrent_evaluation.png)
 
@@ -89,23 +89,45 @@ Since the simple recurrent model performed well and is clearly overfitting on th
 
 ```
 inputs = keras.Input(shape=(settings['window_size'], num_features))
-x = layers.LSTM(32, recurrent_dropout=0.25)(inputs)
+x = layers.LSTM(48, recurrent_dropout=0.25)(inputs)
 x = layers.Dropout(0.5)(x)
 outputs = layers.Dense(1)(x)
 model = keras.Model(inputs, outputs)
 ```
 
 #### Training
-The best validation MAE of 2.66 degrees Celsius occurs in the 13th epoch:
+The best validation MAE of 2.65 degrees Celsius occurs in the 4th epoch:
 
 ![Recurrent dropout network loss curves](/figures/temperature/recurrent_dropout_training.png)
 
 #### Evaluation
-The best version of the model achieves a test MAE of 2.48 degrees Celsius, and the following (sample of) predictions vs targets:
+The best version of the model achieves a test MAE of 2.49 degrees Celsius, and the following (sample of) predictions vs targets:
 
 ![Recurrent dropout network predictions](/figures/temperature/recurrent_dropout_evaluation.png)
 
 ### Stacked Recurrent Layers
+Since the recurrent model with dropout is no longer obviously overfitting, we can try to extend the size of our model to improve performance by stacking LTSM layers.
+
+#### Model
+
+```
+inputs = keras.Input(shape=(settings['window_size'], num_features))
+x = layers.LSTM(48, recurrent_dropout=0.5, return_sequences=True)(inputs)
+x = layers.LSTM(48, recurrent_dropout=0.5)(x)
+x = layers.Dropout(0.5)(x)
+outputs = layers.Dense(1)(x)
+model = keras.Model(inputs, outputs)
+```
+
+#### Training
+The best validation MAE of 2.69 degrees Celsius occurs in the 2nd epoch:
+
+![Stacked recurrent dropout network loss curves](/figures/temperature/stacked_recurrent_training.png)
+
+#### Evaluation
+The best version of the model achieves a test MAE of 2.53 degrees Celsius, and the following (sample of) predictions vs targets:
+
+![Stacked recurrent dropout network predictions](/figures/temperature/stacked_recurrent_evaluation.png)
 
 ## Wind Prediction
 Look to predict the wind vector at the next measurement (10 minutes time).
