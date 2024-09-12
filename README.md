@@ -5,16 +5,16 @@ An exploration of different supervised machine learning models for predicting fu
 
 ### Retrieval
 - The data used is measured at WS Saaleaue and available at https://www.bgc-jena.mpg.de/wetter/weather_data.html. It contains measurements for various meteorological variables every 10 minutes dating back to midway through 2002.
-- The data is downloaded using the function `data_download(years)` where the years specified is the number of years into the past to download.
+- The data is downloaded using the function `data_download(years)`, where the years specified is the number of years into the past to download.
 - Before saving any data, some columns are dropped such as rainfall duration.
 - The data is then saved .csv file for easy opening and processing.
 
 ### Preprocessing
-- The data has -9999.0 entries as placeholders for no data measured. To resolve this we remove them with linearly interpolated values.
+- The data has -9999.0 entries as placeholders for no data measured -  to resolve this we replace them with linearly interpolated values.
 - We carry out feature engineering on the data - wind direction and speed are turned into a wind vector and the Date Time index is used to create daily and yearly time signals.
 - Target data is extracted/copied depending on what we are predicting.
 - The data is then normalized into the standard normal distribution.
-- We make use of TensorFlow's in-built timeseries_dataset_from_array to create Dataset objects that work effectively with keras' model training API.
+- We make use of TensorFlow's in-built `timeseries_dataset_from_array` function to create Dataset objects that work effectively with keras' model training API.
 
 ## Training and Testing Models
 We package the training and testing procedures into two functions for easy reusability. 
