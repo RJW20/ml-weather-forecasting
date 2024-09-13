@@ -35,7 +35,7 @@ We will attempt to predict the temperature in 24 hours time. We will sample the 
 ### Baseline
 The common-sense baseline that we should look to beat is to predict that the temperature in 24 hours time will be exactly the same as it is now. This results in a validation MAE of 3.03 degrees Celsius, a test MAE of 2.85 degrees Celsius, and the following (sample of) predictions vs targets:
 
-![Basline predictions](/figures/temperature/baseline_evaluation.png)
+![Baseline predictions](/figures/temperature/baseline_evaluation.png)
 
 ### Dense
 The simplest and cheapest machine learning model we can try is a small densely connected one. 
@@ -130,7 +130,81 @@ The best version of the model achieves a test MAE of 2.53 degrees Celsius, and t
 ![Stacked recurrent dropout network predictions](/figures/temperature/stacked_recurrent_evaluation.png)
 
 ## Wind Prediction
-Look to predict the wind vector at the next measurement (10 minutes time).
+We will attempt to predict the wind vector at the next measurement (in 10 minutes time). We will use a window of 60 timesteps (so data spanning 10 hours in this case). We will use a training, validation, testing data split of 0.7, 0.2, 0.1. The loss used in any model training is the mean squared error, but we will track the mean absolute error (MAE) on the validation and testing datasets.
+
+### Baseline
+The common-sense baseline that we should look to beat is to predict that the wind vector in 10 minutes time will be exactly the same as it is now. This results in a validation MAE of 0.864 m/s, a test MAE of 0.841 m/s, and the following (sample of) predictions vs targets:
+
+![Baseline predictions](/figures/wind/baseline_evaluation.png)
+
+### Dense
+The simplest and cheapest machine learning model we can try is a small densely connected one.
+
+#### Model
+
+```
+inputs = keras.Input(shape=(settings['window_size'], num_features))
+x = layers.Flatten()(inputs)
+x = layers.Dense(16, activation="relu")(x)
+outputs = layers.Dense(2)(x)
+model = keras.Model(inputs, outputs)
+```
+
+#### Training
+The best validation MAE of 0.416 m/s occurs in the 16th epoch:
+
+![Dense network loss curves](/figures/wind/dense_training.png)
+
+#### Evaluation
+The best version of the model achieves a test MAE of 0.397 m/s, and the following (sample of) predictions vs targets:
+
+![Dense network predictions](/figures/wind/dense_evaluation.png)
+
+### Simple Recurrent
+The simplest model that takes advantage of the fact that our data is a timeseries is one containing a recurrent layer.
+
+#### Model
+
+```
+inputs = keras.Input(shape=(settings['window_size'], num_features))
+x = layers.LSTM(32)(inputs)
+outputs = layers.Dense(1)(x)
+model = keras.Model(inputs, outputs)
+```
+
+#### Training
+The best validation MAE of 0.399 m/s occurs in the 11th epoch:
+
+![Recurrent network loss curves](/figures/wind/recurrent_training.png)
+
+#### Evaluation
+The best version of the model achieves a test MAE of 0.386 m/s, and the following (sample of) predictions vs targets:
+
+![Recurrent network predictions](/figures/wind/recurrent_evaluation.png)
+
+### Stacked Recurrent Layers
+Since the recurrent model is not obviously overfitting, we will increase the size and complexity of our model in attempt to improve performance. We can do this by stacking LTSM layers.
+
+#### Model
+
+```
+inputs = keras.Input(shape=(settings['window_size'], num_features))
+x = layers.LSTM(64, recurrent_dropout=0.5, return_sequences=True)(inputs)
+x = layers.LSTM(64, recurrent_dropout=0.5)(x)
+x = layers.Dropout(0.5)(x)
+outputs = layers.Dense(1)(x)
+model = keras.Model(inputs, outputs)
+```
+
+#### Training
+The best validation MAE of 0.401 m/s occurs in the 9th epoch:
+
+![Stacked recurrent dropout network loss curves](/figures/wind/stacked_recurrent_training.png)
+
+#### Evaluation
+The best version of the model achieves a test MAE of 0.388 m/s, and the following (sample of) predictions vs targets:
+
+![Stacked recurrent dropout network predictions](/figures/wind/stacked_recurrent_evaluation.png)
 
 ## Rain Prediction
 Look to predict the amount of rainfall within the next hour.
