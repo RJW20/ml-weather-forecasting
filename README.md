@@ -173,7 +173,7 @@ model = keras.Model(inputs, outputs)
 ```
 
 #### Training
-The best validation MAE of 0.399 m/s occurs in the 11th epoch:
+The best validation MAE of 0.399 m/s occurs in the 12th epoch:
 
 ![Recurrent network loss curves](/figures/wind/recurrent_training.png)
 
