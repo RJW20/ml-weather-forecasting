@@ -38,8 +38,8 @@ class Baseline:
         total_abs_error = 0
         samples_seen = 0
         for samples, targets in dataset:
-            # Wind x and y are in columns 12 and 13
-            predictions = samples[:,-1,11:13] * self.target_std + \
+            # Wind x and y are in columns 13 and 14
+            predictions = samples[:,-1,12:14] * self.target_std + \
                 self.target_mean
             total_abs_error += np.sum(np.abs(predictions - targets))
             samples_seen += samples.shape[0]
