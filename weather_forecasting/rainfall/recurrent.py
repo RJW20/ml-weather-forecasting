@@ -35,7 +35,10 @@ def simple_recurrent() -> None:
     plt.savefig("figures/rainfall/recurrent_training.png", bbox_inches="tight")
     model = keras.models.load_model(save_location)
     evaluate_model(model, test_dataset, "rain (mm)")
-    plt.savefig("figures/rainfall/recurrent_evaluation.png", bbox_inches="tight")
+    plt.savefig(
+        "figures/rainfall/recurrent_evaluation.png",
+        bbox_inches="tight",
+    )
     plt.show()
 
 

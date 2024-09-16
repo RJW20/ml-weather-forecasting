@@ -6,7 +6,7 @@ settings = {
     'train_prop': 0.7,
     'val_prop': 0.2,
     'sampling_rate': 1,
-    'window_size': 120,
+    'window_size': 36,
     'batch_size': 256,
     'target_delay': 6,
 

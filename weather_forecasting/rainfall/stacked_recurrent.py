@@ -27,8 +27,8 @@ def stacked_recurrent() -> None:
     num_features = train_dataset.element_spec[0].shape[2]
 
     inputs = keras.Input(shape=(settings['window_size'], num_features))
-    x = layers.LSTM(32, recurrent_dropout=0.5, return_sequences=True)(inputs)
-    x = layers.LSTM(32, recurrent_dropout=0.5)(x)
+    x = layers.LSTM(64, recurrent_dropout=0.5, return_sequences=True)(inputs)
+    x = layers.LSTM(64, recurrent_dropout=0.5)(x)
     x = layers.Dropout(0.5)(x)
     outputs = layers.Dense(1)(x)
     model = keras.Model(inputs, outputs)
