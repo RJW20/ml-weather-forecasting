@@ -5,7 +5,7 @@ An exploration of different supervised machine learning models for predicting fu
 
 ### Retrieval
 - The data used is measured at WS Saaleaue and available at https://www.bgc-jena.mpg.de/wetter/weather_data.html. It contains measurements for various meteorological variables every 10 minutes dating back to midway through 2002.
-- The data is downloaded using the function `data_download(years)`, where the years specified is the number of years into the past to download.
+- The data is downloaded using the function `data_download(years)`, where the years specified is the number of years into the past to download. In this case, 7 years is used.
 - Before saving any data, some columns are dropped such as rainfall duration.
 - The data is then saved .csv file for easy opening and processing.
 
