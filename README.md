@@ -129,8 +129,11 @@ The best version of the model achieves a test MAE of 2.53 degrees Celsius, and t
 
 ![Stacked recurrent dropout network predictions](/figures/temperature/stacked_recurrent_evaluation.png)
 
+### Closing Thoughts
+The use of a recurrent layer clearly provided better results than using just a dense layer (although all models proved to be more capable than the baseline). It also seems as though this is too simple of a problem for stacking recurrent layers to actually provide a benefit, with the recurrent with dropout model proving to be the most accurate on the testing data.
+
 ## Wind Prediction
-We will attempt to predict the wind vector at the next measurement (in 10 minutes time). We will use a window of 60 timesteps (so data spanning 10 hours in this case). We will use a training, validation, testing data split of 0.7, 0.2, 0.1. The loss used in any model training is the mean squared error, but we will track the mean absolute error (MAE) on the validation and testing datasets.
+We will attempt to predict the wind vector at the next measurement (in 10 minutes time). Note that we will be predicting the wind x and y values, and transferring these into direction and magnitude for displaying the results. We will use a window of 60 timesteps (so data spanning 10 hours in this case). We will use a training, validation, testing data split of 0.7, 0.2, 0.1. The loss used in any model training is the mean squared error, but we will track the mean absolute error (MAE) on the validation and testing datasets.
 
 ### Baseline
 The common-sense baseline that we should look to beat is to predict that the wind vector in 10 minutes time will be exactly the same as it is now. This results in a validation MAE of 0.864 m/s, a test MAE of 0.841 m/s, and the following (sample of) predictions vs targets:
@@ -205,6 +208,9 @@ The best validation MAE of 0.401 m/s occurs in the 9th epoch:
 The best version of the model achieves a test MAE of 0.388 m/s, and the following (sample of) predictions vs targets:
 
 ![Stacked recurrent dropout network predictions](/figures/wind/stacked_recurrent_evaluation.png)
+
+### Closing Thoughts
+All of the models we tried performed significantly better than the baseline, and due to having the best results and the smallest computational costs the simple recurrent model is the clear winner when it comes to predicting the wind vector.
 
 ## Rainfall Prediction
 We will attempt to predict the amount of rainfall within the next hour. We will use a window of 36 timesteps (so data spanning 6 hours in this case). We will use a training, validation, testing data split of 0.7, 0.2, 0.1. The loss used in any model training is the mean squared error, but we will track the mean absolute error (MAE) on the validation and testing datasets.
@@ -305,3 +311,6 @@ The best validation MAE of 0.0627 mm occurs in the 5th epoch:
 The best version of the model achieves a test MAE of 0.0841 mm, and the following (sample of) predictions vs targets:
 
 ![Stacked recurrent dropout network predictions](/figures/rainfall/stacked_recurrent_evaluation.png)
+
+### Closing Thoughts
+The stacked recurrent model is the only one that gets close to the baseline, but it still loses to it. This poor effectiveness can be more clearly demonstrated if we try a different baseline. Observing the graphs we can see that the mode in the rain data by quite some margin is 0 mm of rain in an hour, so how does a model that simply predicts 0 mm for all windows perform? We get a validation MAE of 0.0551 mm and a test MAE of 0.0750 mm, clearly even better than any of our expensive models (but also ultimately useless since it will have a small/nonexistent error most of the time but also be very wrong when it does rain). Thinking about likely reasons as to why rainfall is much harder to predict than any of the other meteorological variables predicted here, it probably has to do with the fact that rain covers an area rather than a point; professional weather prediction looks at weatherfronts and how they move rather than considering lots of points on a map where data is collected as individual systems.
