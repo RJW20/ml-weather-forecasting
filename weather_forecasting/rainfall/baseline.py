@@ -53,6 +53,7 @@ class Baseline:
                     self.target_std + self.target_mean,
                 axis=1,
             )
+            #predictions = np.zeros(shape=targets.shape)   # For 2nd baseline
             total_abs_error += np.sum(np.abs(predictions - targets))
             samples_seen += samples.shape[0]
 
