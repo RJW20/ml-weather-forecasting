@@ -206,5 +206,102 @@ The best version of the model achieves a test MAE of 0.388 m/s, and the followin
 
 ![Stacked recurrent dropout network predictions](/figures/wind/stacked_recurrent_evaluation.png)
 
-## Rain Prediction
-Look to predict the amount of rainfall within the next hour.
+## Rainfall Prediction
+We will attempt to predict the amount of rainfall within the next hour. We will use a window of 36 timesteps (so data spanning 6 hours in this case). We will use a training, validation, testing data split of 0.7, 0.2, 0.1. The loss used in any model training is the mean squared error, but we will track the mean absolute error (MAE) on the validation and testing datasets.
+
+### Baseline
+A sensible baseline that we should look to beat is to predict that the rainfall in the next hour is the same as in the last hour. This results in a validation MAE of 0.0657 mm, a test MAE of 0.0838 mm, and the following (sample of) predictions vs targets:
+
+![Baseline predictions](/figures/rainfall/baseline_evaluation.png)
+
+### Dense
+The simplest and cheapest machine learning model we can try is a small densely connected one.
+
+#### Model
+
+```
+inputs = keras.Input(shape=(settings['window_size'], num_features))
+x = layers.Flatten()(inputs)
+x = layers.Dense(16, activation="relu")(x)
+outputs = layers.Dense(1)(x)
+model = keras.Model(inputs, outputs)
+```
+
+#### Training
+The best validation MAE of 0.0848 mm occurs in the 3rd epoch:
+
+![Dense network loss curves](/figures/rainfall/dense_training.png)
+
+#### Evaluation
+The best version of the model achieves a test MAE of 0.1118 mm, and the following (sample of) predictions vs targets:
+
+![Dense network predictions](/figures/rainfall/dense_evaluation.png)
+
+### Simple Recurrent
+The simplest model that takes advantage of the fact that our data is a timeseries is one containing a recurrent layer.
+
+#### Model
+
+```
+inputs = keras.Input(shape=(settings['window_size'], num_features))
+x = layers.LSTM(16)(inputs)
+outputs = layers.Dense(1)(x)
+model = keras.Model(inputs, outputs)
+```
+
+#### Training
+The best validation MAE of 0.0733 mm occurs in the 6th epoch:
+
+![Recurrent network loss curves](/figures/rainfall/recurrent_training.png)
+
+#### Evaluation
+The best version of the model achieves a test MAE of 0.0947 mm, and the following (sample of) predictions vs targets:
+
+![Recurrent network predictions](/figures/rainfall/recurrent_evaluation.png)
+
+### Recurrent with Dropout
+Since the simple recurrent model is slightly overfitting on the training dataset, we can use a similar model but with dropout in an attempt to combat it.
+
+#### Model
+
+```
+inputs = keras.Input(shape=(settings['window_size'], num_features))
+x = layers.LSTM(64, recurrent_dropout=0.25)(inputs)
+x = layers.Dropout(0.5)(x)
+outputs = layers.Dense(1)(x)
+model = keras.Model(inputs, outputs)
+```
+
+#### Training
+The best validation MAE of 0.0619 mm occurs in the 3rd epoch:
+
+![Recurrent dropout network loss curves](/figures/rainfall/recurrent_dropout_training.png)
+
+#### Evaluation
+The best version of the model achieves a test MAE of 0.0898 mm, and the following (sample of) predictions vs targets:
+
+![Recurrent dropout network predictions](/figures/rainfall/recurrent_dropout_evaluation.png)
+
+### Stacked Recurrent Layers
+Since the recurrent model with dropout is no longer obviously overfitting, we can try to extend the size of our model to improve performance by stacking LTSM layers.
+
+#### Model
+
+```
+inputs = keras.Input(shape=(settings['window_size'], num_features))
+x = layers.LSTM(64, recurrent_dropout=0.5, return_sequences=True)(inputs)
+x = layers.LSTM(64, recurrent_dropout=0.5)(x)
+x = layers.Dropout(0.5)(x)
+outputs = layers.Dense(1)(x)
+model = keras.Model(inputs, outputs)
+```
+
+#### Training
+The best validation MAE of 0.0627 mm occurs in the 5th epoch:
+
+![Stacked recurrent dropout network loss curves](/figures/rainfall/stacked_recurrent_training.png)
+
+#### Evaluation
+The best version of the model achieves a test MAE of 0.0841 mm, and the following (sample of) predictions vs targets:
+
+![Stacked recurrent dropout network predictions](/figures/rainfall/stacked_recurrent_evaluation.png)
